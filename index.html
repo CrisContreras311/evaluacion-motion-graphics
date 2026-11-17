@@ -1,0 +1,555 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Motion Graphics para Publicidad</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: respuesta primero (guía por necesidad), luego semáforo comparativo, luego una pestaña por herramienta con planes en tarjetas */
+:root {
+  --bg: #f5f6f8;
+  --surface: #ffffff;
+  --fg: #16192a;
+  --muted: #5a6075;
+  --line: #dde0e8;
+  --accent: #2b47c9;
+  --accent-soft: #e7ebfb;
+  --ok: #1d7a4a; --ok-bg: #e2f3e9;
+  --mid: #8a5a00; --mid-bg: #fbf0d9;
+  --bad: #b3261e; --bad-bg: #fbe5e3;
+  --display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", sans-serif;
+  --body: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #11131c; --surface: #191c28; --fg: #e8eaf2; --muted: #9aa0b6; --line: #2c3042;
+    --accent: #8ea2ff; --accent-soft: #232a4d;
+    --ok: #6fd39c; --ok-bg: #173527; --mid: #f0c066; --mid-bg: #3a2e14; --bad: #ff8a80; --bad-bg: #3d1d1b;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #11131c; --surface: #191c28; --fg: #e8eaf2; --muted: #9aa0b6; --line: #2c3042;
+  --accent: #8ea2ff; --accent-soft: #232a4d;
+  --ok: #6fd39c; --ok-bg: #173527; --mid: #f0c066; --mid-bg: #3a2e14; --bad: #ff8a80; --bad-bg: #3d1d1b;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body { background: var(--bg); color: var(--fg); font: 15px/1.6 var(--body); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--surface); }
+.wrap { max-width: 1040px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+a { color: var(--accent); }
+a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; line-height: 1.15; margin: 0; }
+h1 { font-size: clamp(28px, 5vw, 44px); font-weight: 700; letter-spacing: -0.01em; }
+h2 { font-size: 24px; font-weight: 700; }
+h3 { font-size: 18px; font-weight: 600; }
+p { margin: 0; max-width: 68ch; }
+.eyebrow { font: 500 12px/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.note { font-size: 13px; color: var(--muted); }
+
+header.top { background: var(--surface); border-bottom: 1px solid var(--line); }
+header.top .wrap { padding-block: 36px 28px; display: grid; gap: 14px; }
+.meta { display: flex; flex-wrap: wrap; gap: 6px 18px; color: var(--muted); font-size: 13px; }
+.meta b { color: var(--fg); font-weight: 600; }
+
+nav.toc { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--surface); border-bottom: 1px solid var(--line); }
+nav.toc .wrap { display: flex; gap: 4px; overflow-x: auto; padding-block: 8px; }
+nav.toc a { white-space: nowrap; padding: 6px 10px; border-radius: 6px; font-size: 13px; text-decoration: none; color: var(--muted); }
+nav.toc a:hover { background: var(--accent-soft); color: var(--accent); }
+
+main .wrap { display: grid; gap: 52px; padding-block: 36px 72px; }
+section { display: grid; gap: 16px; min-width: 0; scroll-margin-top: 60px; }
+
+/* Respuesta corta */
+.answer { background: var(--accent-soft); border-radius: 12px; padding: 20px 22px; display: grid; gap: 10px; }
+.answer p { font-size: 16px; }
+
+/* Guía por necesidad */
+.needs { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+.need { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px; display: grid; gap: 8px; align-content: start; }
+.need .q { font-size: 13px; color: var(--muted); }
+.need h3 { font-size: 17px; }
+.need .go { display: flex; flex-wrap: wrap; gap: 6px; }
+.need .go button { font: 600 13px var(--body); border: 1px solid var(--accent); color: var(--accent); background: transparent; border-radius: 999px; padding: 3px 12px; cursor: pointer; }
+.need .go button:hover { background: var(--accent); color: var(--surface); }
+.need p { font-size: 13.5px; color: var(--muted); }
+
+/* Semáforo */
+.tbl { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { text-align: left; padding: 11px 12px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+tr:last-child td { border-bottom: 0; }
+th { font: 500 11.5px/1.3 var(--mono); letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); background: var(--bg); white-space: nowrap; }
+td.num { font-variant-numeric: tabular-nums; white-space: nowrap; font-weight: 600; }
+td .sub { display: block; color: var(--muted); font-size: 12.5px; font-weight: 400; }
+.tool-link { font-weight: 600; background: none; border: 0; padding: 0; color: var(--accent); cursor: pointer; font: inherit; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+
+.pill { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 999px; font-size: 12.5px; font-weight: 600; white-space: nowrap; }
+.pill::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+.pill.plain::before { display: none; }
+.ok { background: var(--ok-bg); color: var(--ok); }
+.mid { background: var(--mid-bg); color: var(--mid); }
+.bad { background: var(--bad-bg); color: var(--bad); }
+.cur { background: var(--bg); color: var(--muted); border: 1px solid var(--line); }
+
+.legend { display: flex; flex-wrap: wrap; gap: 8px 16px; font-size: 13px; color: var(--muted); align-items: center; }
+
+/* Pestañas de herramientas */
+.tabs { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px; }
+.tabs button { flex: 0 0 auto; font: 600 14px var(--body); padding: 8px 14px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); color: var(--fg); cursor: pointer; }
+.tabs button[aria-selected="true"] { background: var(--accent); border-color: var(--accent); color: var(--surface); }
+
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 24px; display: grid; gap: 22px; min-width: 0; }
+.p-head { display: grid; gap: 10px; }
+.p-title { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
+.p-title h3 { font-size: 24px; }
+.p-title .url { font: 13px var(--mono); color: var(--muted); }
+.verdict { font-size: 15.5px; }
+.verdict b { color: var(--accent); }
+
+.crit3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; }
+.crit { border: 1px solid var(--line); border-radius: 10px; padding: 14px; display: grid; gap: 8px; align-content: start; min-width: 0; }
+.crit h4 { margin: 0; display: flex; justify-content: space-between; align-items: center; gap: 8px; font: 500 12px/1.3 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.crit ul { margin: 0; padding-left: 18px; display: grid; gap: 4px; font-size: 14px; }
+
+.block-h { font: 500 12px/1.3 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin: 0; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.plans { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; }
+.plan { border: 1px solid var(--line); border-radius: 10px; padding: 14px; display: grid; gap: 4px; align-content: start; }
+.plan.pick { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.plan .name { font-weight: 600; font-size: 14px; display: flex; justify-content: space-between; gap: 6px; align-items: center; }
+.plan .tag { font-size: 11px; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: 0.05em; }
+.plan .price { font: 700 24px/1.1 var(--display); font-variant-numeric: tabular-nums; }
+.plan .price small { font: 500 12px var(--body); color: var(--muted); }
+.plan .alt { font-size: 12.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.plan .inc { font-size: 13px; margin-top: 4px; }
+
+.use { font-size: 14px; display: grid; gap: 6px; }
+.use ul { margin: 0; padding-left: 18px; display: grid; gap: 4px; }
+
+details { border: 1px solid var(--line); border-radius: 10px; }
+details > summary { cursor: pointer; padding: 12px 14px; font-weight: 600; font-size: 14px; }
+details > div { padding: 0 14px 14px; display: grid; gap: 8px; font-size: 14px; }
+details ol, details ul { margin: 0; padding-left: 20px; display: grid; gap: 4px; }
+code, pre { font-family: var(--mono); font-size: 12.5px; }
+code { background: var(--bg); padding: 1px 5px; border-radius: 4px; overflow-wrap: anywhere; }
+pre { background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; margin: 0; overflow-x: auto; white-space: pre; }
+
+/* Pasos */
+ol.steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; counter-reset: s; }
+ol.steps li { counter-increment: s; display: grid; grid-template-columns: 32px 1fr; gap: 12px; align-items: start; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px; }
+ol.steps li::before { content: counter(s); width: 32px; height: 32px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); font: 700 15px/32px var(--display); text-align: center; }
+ol.steps li div { display: grid; gap: 2px; min-width: 0; }
+ol.steps li span { font-size: 14px; color: var(--muted); }
+
+ul.plain { margin: 0; padding-left: 18px; display: grid; gap: 6px; max-width: 76ch; }
+.sources { columns: 2 260px; column-gap: 28px; font-size: 13px; padding-left: 18px; margin: 0; }
+.sources li { break-inside: avoid; margin-bottom: 6px; }
+footer { color: var(--muted); font-size: 13px; }
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <span class="eyebrow">ViveCalli · Tarea de investigación</span>
+    <h1>¿Qué herramienta de Motion Graphics conviene para nuestra publicidad?</h1>
+    <p>Comparamos seis herramientas en tres cosas: si se conectan con Claude (MCP), qué tan fáciles son de usar y cuánto cuestan.</p>
+    <div class="meta">
+      <span>Responsable: <b>Cristian Misdiel Contreras Mota</b></span>
+      <span>Revisado: <b>17 nov 2026</b></span>
+      <span>Moneda: <b>todas cobran en dólares (USD)</b></span>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Secciones">
+  <div class="wrap">
+    <a href="#respuesta">Respuesta corta</a>
+    <a href="#necesidad">¿Qué necesitas?</a>
+    <a href="#semaforo">Semáforo</a>
+    <a href="#herramientas">Cada herramienta</a>
+    <a href="#siguientes">Siguientes pasos</a>
+    <a href="#pendientes">Pendientes</a>
+    <a href="#fuentes">Fuentes</a>
+  </div>
+</nav>
+
+<main>
+<div class="wrap">
+
+<section id="respuesta">
+  <span class="eyebrow">Respuesta corta</span>
+  <div class="answer">
+    <p><b>Empezar con MotionVid y Motion.</b> Las dos se conectan con Claude en un clic, se usan escribiendo lo que quieres y cuestan poco para probar: MotionVid desde 19 USD al mes y Motion desde 6 USD en créditos.</p>
+    <p>Hera queda para gráficos de marca, Runway para tomas realistas y Artlist para música con licencia. ArtCraft todavía no está lista.</p>
+  </div>
+</section>
+
+<section id="necesidad">
+  <span class="eyebrow">Guía rápida</span>
+  <h2>¿Qué necesitas hacer?</h2>
+  <div class="needs">
+    <div class="need">
+      <span class="q">Necesito…</span>
+      <h3>Un anuncio completo con voz y música</h3>
+      <div class="go"><button type="button" data-open="motionvid">MotionVid</button><button type="button" data-open="motion">Motion</button></div>
+      <p>Escribes la idea y sale el video armado: guion, narración, música y gráficos.</p>
+    </div>
+    <div class="need">
+      <span class="q">Necesito…</span>
+      <h3>Textos, precios o datos animados con nuestra marca</h3>
+      <div class="go"><button type="button" data-open="hera">Hera</button></div>
+      <p>Titulares, infografías y overlays con nuestros colores, fuentes y logo.</p>
+    </div>
+    <div class="need">
+      <span class="q">Necesito…</span>
+      <h3>Tomas realistas de producto o ambiente</h3>
+      <div class="go"><button type="button" data-open="runway">Runway</button></div>
+      <p>Escenas generadas con IA sin tener que grabar. Se combina con las demás.</p>
+    </div>
+    <div class="need">
+      <span class="q">Necesito…</span>
+      <h3>Música y efectos que se puedan usar en anuncios pagados</h3>
+      <div class="go"><button type="button" data-open="artlist">Artlist</button></div>
+      <p>Catálogo con licencia comercial para evitar reclamos de derechos de autor.</p>
+    </div>
+  </div>
+</section>
+
+<section id="semaforo">
+  <span class="eyebrow">Comparativa</span>
+  <h2>Semáforo de las seis herramientas</h2>
+  <div class="legend">
+    <span class="pill ok">Bien</span><span class="pill mid">Con reservas</span><span class="pill bad">Débil</span>
+    <span>Toca el nombre para ver el detalle.</span>
+  </div>
+  <div class="tbl">
+    <table>
+      <thead>
+        <tr><th>Herramienta</th><th>Para qué sirve</th><th>¿Se conecta con Claude?</th><th>¿Es fácil?</th><th>Costo</th><th>Plan más barato</th><th>Moneda</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><button type="button" class="tool-link" data-open="motionvid">MotionVid</button></td>
+          <td>Anuncios y explainers con narración</td>
+          <td><span class="pill ok">Sí, en un clic</span></td>
+          <td><span class="pill ok">Muy fácil</span></td>
+          <td><span class="pill ok">Accesible</span></td>
+          <td class="num">19 USD/mes</td>
+          <td><span class="pill plain cur">USD</span></td>
+        </tr>
+        <tr>
+          <td><button type="button" class="tool-link" data-open="motion">Motion</button></td>
+          <td>Agente que edita y publica en redes</td>
+          <td><span class="pill ok">Sí, en un clic</span></td>
+          <td><span class="pill ok">Muy fácil</span></td>
+          <td><span class="pill ok">Accesible</span></td>
+          <td class="num">6 USD<span class="sub">200 créditos, pago único</span></td>
+          <td><span class="pill plain cur">USD</span></td>
+        </tr>
+        <tr>
+          <td><button type="button" class="tool-link" data-open="hera">Hera</button></td>
+          <td>Gráficos animados de marca</td>
+          <td><span class="pill ok">Sí, con API key</span></td>
+          <td><span class="pill ok">Fácil</span></td>
+          <td><span class="pill mid">Precio no público</span></td>
+          <td class="num">Gratis<span class="sub">720p con marca de agua</span></td>
+          <td><span class="pill plain cur">USD</span></td>
+        </tr>
+        <tr>
+          <td><button type="button" class="tool-link" data-open="runway">Runway</button></td>
+          <td>Tomas de video realistas con IA</td>
+          <td><span class="pill ok">Sí, conector oficial</span></td>
+          <td><span class="pill mid">Curva media</span></td>
+          <td><span class="pill mid">Se gasta rápido</span></td>
+          <td class="num">15 USD/mes<span class="sub">12 USD con pago anual</span></td>
+          <td><span class="pill plain cur">USD</span></td>
+        </tr>
+        <tr>
+          <td><button type="button" class="tool-link" data-open="artlist">Artlist</button></td>
+          <td>Música, sonido y stock con licencia</td>
+          <td><span class="pill mid">Lo están retirando</span></td>
+          <td><span class="pill ok">Fácil</span></td>
+          <td><span class="pill mid">Medio</span></td>
+          <td class="num">19.99 USD/mes<span class="sub">11.99 USD con pago anual</span></td>
+          <td><span class="pill plain cur">USD</span></td>
+        </tr>
+        <tr>
+          <td><button type="button" class="tool-link" data-open="artcraft">ArtCraft</button></td>
+          <td>Suite de escritorio gratuita</td>
+          <td><span class="pill mid">Sí, configuración manual</span></td>
+          <td><span class="pill bad">En fase de prueba</span></td>
+          <td><span class="pill ok">Gratis</span></td>
+          <td class="num">0 USD</td>
+          <td><span class="pill plain cur">USD</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note">Ninguna de las seis publica precios en pesos mexicanos (MXN): todas cobran en dólares (USD), así que los precios se dejan en esa moneda. Al pagar con tarjeta mexicana, el banco hace la conversión al tipo de cambio del día y puede cobrar comisión.</p>
+</section>
+
+<section id="herramientas">
+  <span class="eyebrow">Detalle</span>
+  <h2>Cada herramienta</h2>
+  <div class="tabs" role="tablist" aria-label="Herramientas">
+    <button type="button" role="tab" id="tab-motionvid" aria-controls="motionvid" aria-selected="true">MotionVid</button>
+    <button type="button" role="tab" id="tab-motion" aria-controls="motion" aria-selected="false">Motion</button>
+    <button type="button" role="tab" id="tab-hera" aria-controls="hera" aria-selected="false">Hera</button>
+    <button type="button" role="tab" id="tab-runway" aria-controls="runway" aria-selected="false">Runway</button>
+    <button type="button" role="tab" id="tab-artlist" aria-controls="artlist" aria-selected="false">Artlist</button>
+    <button type="button" role="tab" id="tab-artcraft" aria-controls="artcraft" aria-selected="false">ArtCraft</button>
+  </div>
+
+  <!-- MotionVid -->
+  <article class="panel" id="motionvid" role="tabpanel" aria-labelledby="tab-motionvid">
+    <div class="p-head">
+      <div class="p-title"><h3>MotionVid</h3><span class="url">motionvid.ai</span><span class="pill ok">Recomendada para empezar</span></div>
+      <p class="verdict"><b>En una frase:</b> escribes qué anuncio quieres y entrega el video con narración (74 idiomas), música, gráficos y texto en pantalla.</p>
+    </div>
+    <div class="crit3">
+      <div class="crit"><h4>Conexión con Claude <span class="pill ok">Sí</span></h4>
+        <ul><li>Incluida en todos los planes pagos.</li><li>Se conecta en un clic iniciando sesión.</li><li>Claude pide confirmación antes de gastar créditos.</li></ul></div>
+      <div class="crit"><h4>Facilidad <span class="pill ok">Muy fácil</span></h4>
+        <ul><li>Se edita escena por escena.</li><li>Plantillas para anuncios, SaaS y explainers.</li><li>Tutoriales en YouTube, Discord y chat de soporte.</li></ul></div>
+      <div class="crit"><h4>Aporte a la publicidad</h4>
+        <ul><li>Anuncio completo en minutos.</li><li>La misma campaña en varios idiomas.</li></ul></div>
+    </div>
+    <div class="block-h">Precios <span class="pill plain cur">USD por mes</span> <span>Hasta 40% menos con pago anual</span></div>
+    <div class="plans">
+      <div class="plan pick"><div class="name">Starter <span class="tag">Para probar</span></div><div class="price">19 <small>USD/mes</small></div><div class="inc">500 créditos · 60 min de exportación · 1080p · MCP</div></div>
+      <div class="plan"><div class="name">Pro</div><div class="price">29 <small>USD/mes</small></div><div class="inc">800 créditos · 100 min · infografías 4K · MCP</div></div>
+      <div class="plan"><div class="name">Ultimate</div><div class="price">49 <small>USD/mes</small></div><div class="inc">1,500 créditos · 200 min · 4K · MCP + API</div></div>
+      <div class="plan"><div class="name">Creator</div><div class="price">249 <small>USD/mes</small></div><div class="inc">8,000 créditos · exportación ilimitada · MCP + API</div></div>
+      <div class="plan"><div class="name">Recargas</div><div class="price">10–120 <small>USD</small></div><div class="inc">Hasta 40% de créditos extra; no caducan</div></div>
+    </div>
+    <details><summary>Cómo conectarla con Claude</summary><div>
+      <ol><li>En Claude: Personalizar → Conectores → Agregar conector personalizado.</li><li>Nombre: MotionVid. URL: <code>https://motionvid.ai/mcp</code></li><li>Clic en Conectar e inicia sesión con tu cuenta.</li></ol>
+      <p>En Claude Code:</p><pre>claude mcp add --transport http motionvid https://motionvid.ai/mcp</pre>
+    </div></details>
+  </article>
+
+  <!-- Motion -->
+  <article class="panel" id="motion" role="tabpanel" aria-labelledby="tab-motion">
+    <div class="p-head">
+      <div class="p-title"><h3>Motion</h3><span class="url">motion.so</span><span class="pill ok">Recomendada para empezar</span></div>
+      <p class="verdict"><b>En una frase:</b> un agente de video que recibe una idea, footage o una referencia, arma el video, lo revisa y lo publica en redes.</p>
+    </div>
+    <div class="crit3">
+      <div class="crit"><h4>Conexión con Claude <span class="pill ok">Sí</span></h4>
+        <ul><li>Conector oficial con inicio de sesión, sin API key.</li><li>Crea motion graphics y maneja automatizaciones.</li><li>Desde Claude no genera medios con IA (imagen o video).</li></ul></div>
+      <div class="crit"><h4>Facilidad <span class="pill ok">Muy fácil</span></h4>
+        <ul><li>Se pide por chat y se ajusta en la línea de tiempo.</li><li>Se conecta con Drive, Dropbox, Notion y Figma.</li><li>Guías claras en docs.motion.so.</li></ul></div>
+      <div class="crit"><h4>Aporte a la publicidad</h4>
+        <ul><li>Programa y publica en Instagram, TikTok, YouTube y LinkedIn.</li><li>Exporta a Premiere, After Effects y DaVinci.</li></ul></div>
+    </div>
+    <div class="block-h">Precios <span class="pill plain cur">USD</span></div>
+    <div class="plans">
+      <div class="plan pick"><div class="name">Flex <span class="tag">Para probar</span></div><div class="price">6 <small>USD</small></div><div class="alt">pago único</div><div class="inc">200 créditos que no caducan · 1 usuario</div></div>
+      <div class="plan"><div class="name">Pro</div><div class="price">desde 29 <small>USD/mes</small></div><div class="alt">también anual</div><div class="inc">1,000 créditos/mes (hasta 50,000) · 3+ usuarios</div></div>
+      <div class="plan"><div class="name">Enterprise</div><div class="price">A medida</div><div class="inc">50,000+ créditos/mes · usuarios ilimitados</div></div>
+    </div>
+    <p class="note">El costo de cada video cambia según el motor, la duración y las ediciones.</p>
+    <details><summary>Cómo conectarla con Claude</summary><div>
+      <ol><li>Agrega un conector en Claude con la URL <code>https://mcp.motion.so/mcp/anthropic</code></li><li>Inicia sesión o crea tu cuenta de Motion.</li><li>Aprueba los permisos solicitados.</li></ol>
+    </div></details>
+  </article>
+
+  <!-- Hera -->
+  <article class="panel" id="hera" role="tabpanel" aria-labelledby="tab-hera">
+    <div class="p-head">
+      <div class="p-title"><h3>Hera</h3><span class="url">hera.video</span><span class="pill mid">Probar con cuenta gratis</span></div>
+      <p class="verdict"><b>En una frase:</b> la más especializada en motion graphics de marca: titulares, infografías, precios y overlays animados a partir de un texto.</p>
+    </div>
+    <div class="crit3">
+      <div class="crit"><h4>Conexión con Claude <span class="pill ok">Sí</span></h4>
+        <ul><li>Servidor oficial, se conecta con una API key.</li><li>Puede crear videos, revisar su estado y subir logos, fuentes o datos.</li><li>Configuración manual (no es un clic).</li></ul></div>
+      <div class="crit"><h4>Facilidad <span class="pill ok">Fácil</span></h4>
+        <ul><li>Describes el gráfico y ajustas el borrador.</li><li>Kit de marca: colores, fuentes y logo.</li><li>Documentación clara en docs.hera.video.</li></ul></div>
+      <div class="crit"><h4>Aporte a la publicidad</h4>
+        <ul><li>Llamadas a la acción y datos animados.</li><li>Fondo transparente para montar sobre otro video.</li></ul></div>
+    </div>
+    <div class="block-h">Precios <span class="pill plain cur">USD por mes</span> <span class="pill mid">No oficiales</span></div>
+    <div class="plans">
+      <div class="plan pick"><div class="name">Free <span class="tag">Para probar</span></div><div class="price">0 <small>USD</small></div><div class="inc">≈10 videos al día · 720p con marca de agua</div></div>
+      <div class="plan"><div class="name">Standard</div><div class="price">≈20 <small>USD/mes</small></div><div class="alt">≈12 USD con pago anual</div><div class="inc">Sin marca de agua</div></div>
+      <div class="plan"><div class="name">Pro</div><div class="price">24–40 <small>USD/mes</small></div><div class="inc">Hasta 4K · fondo transparente · más prompts</div></div>
+      <div class="plan"><div class="name">Mega</div><div class="price">n/d</div><div class="inc">Nivel superior; precio no reportado</div></div>
+    </div>
+    <p class="note">Hera solo muestra sus precios al iniciar sesión. Estos datos vienen de sitios de terceros y no se sabe qué plan incluye la API.</p>
+    <details><summary>Cómo conectarla con Claude</summary><div>
+      <ol><li>Crea tu API key en app.hera.video → Settings → Developers.</li><li>En Claude Code ejecuta:</li></ol>
+      <pre>claude mcp add --transport http hera https://mcp.hera.video/mcp --header "x-api-key: TU_API_KEY"</pre>
+      <p>En Claude Desktop se agrega en Configuración → Desarrollador → Editar configuración, usando <code>mcp-remote</code>.</p>
+    </div></details>
+  </article>
+
+  <!-- Runway -->
+  <article class="panel" id="runway" role="tabpanel" aria-labelledby="tab-runway">
+    <div class="p-head">
+      <div class="p-title"><h3>Runway</h3><span class="url">runway.com</span><span class="pill mid">Complemento</span></div>
+      <p class="verdict"><b>En una frase:</b> genera tomas de video e imágenes realistas con IA; no hace textos ni gráficos animados.</p>
+    </div>
+    <div class="crit3">
+      <div class="crit"><h4>Conexión con Claude <span class="pill ok">Sí</span></h4>
+        <ul><li>Conector oficial en el directorio de Claude.</li><li>Usa una API key con créditos aparte del plan web.</li></ul></div>
+      <div class="crit"><h4>Facilidad <span class="pill mid">Media</span></h4>
+        <ul><li>El editor web tiene muchas opciones.</li><li>Desde Claude es más simple: describes la toma.</li><li>Documentación técnica muy completa.</li></ul></div>
+      <div class="crit"><h4>Aporte a la publicidad</h4>
+        <ul><li>Tomas de producto y escenas sin rodaje.</li><li>Sube la calidad visual del anuncio.</li></ul></div>
+    </div>
+    <div class="block-h">Precios <span class="pill plain cur">USD por mes</span></div>
+    <div class="plans">
+      <div class="plan"><div class="name">Free</div><div class="price">0 <small>USD</small></div><div class="inc">125 créditos una sola vez</div></div>
+      <div class="plan pick"><div class="name">Standard <span class="tag">Para probar</span></div><div class="price">15 <small>USD/mes</small></div><div class="alt">12 USD con pago anual</div><div class="inc">625 créditos ≈ 52 s de video</div></div>
+      <div class="plan"><div class="name">Pro</div><div class="price">35 <small>USD/mes</small></div><div class="alt">28 USD con pago anual</div><div class="inc">2,250 créditos ≈ 187 s · Brand Kit</div></div>
+      <div class="plan"><div class="name">Max</div><div class="price">95 <small>USD/mes</small></div><div class="alt">76 USD con pago anual</div><div class="inc">9,500 créditos ≈ 791 s · 3 Brand Kits</div></div>
+      <div class="plan"><div class="name">Uso desde Claude (API)</div><div class="price">0.01 <small>USD/crédito</small></div><div class="inc">10 s de video Gen‑4.5 ≈ 1.20 USD · 30 s ≈ 3.60 USD</div></div>
+    </div>
+    <details><summary>Cómo conectarla con Claude</summary><div>
+      <ol><li>Busca "Runway" en el directorio de conectores de Claude y agrégalo.</li><li>Pega tu API key del portal de desarrolladores de Runway.</li></ol>
+      <p>Alternativa local: el servidor de código abierto <code>runwayml/runway-api-mcp-server</code>.</p>
+    </div></details>
+  </article>
+
+  <!-- Artlist -->
+  <article class="panel" id="artlist" role="tabpanel" aria-labelledby="tab-artlist">
+    <div class="p-head">
+      <div class="p-title"><h3>Artlist</h3><span class="url">artlist.io</span><span class="pill mid">Solo para música con licencia</span></div>
+      <p class="verdict"><b>En una frase:</b> catálogo de música, efectos, stock y plantillas con licencia comercial, más generación de imagen y video con IA.</p>
+    </div>
+    <div class="crit3">
+      <div class="crit"><h4>Conexión con Claude <span class="pill mid">Incierta</span></h4>
+        <ul><li>Tuvo conector oficial (<code>mcp.artlist.io/mcp</code>).</li><li>Desde octubre y noviembre de 2026 ya no aparece en sus planes.</li></ul></div>
+      <div class="crit"><h4>Facilidad <span class="pill ok">Fácil</span></h4>
+        <ul><li>Buscador de catálogo sencillo.</li><li>Centro de ayuda con guías paso a paso.</li></ul></div>
+      <div class="crit"><h4>Aporte a la publicidad</h4>
+        <ul><li>Música permitida en anuncios pagados y trabajo para clientes.</li><li>Evita reclamos de derechos de autor.</li></ul></div>
+    </div>
+    <div class="block-h">Precios <span class="pill plain cur">USD por mes</span></div>
+    <div class="plans">
+      <div class="plan pick"><div class="name">AI Starter <span class="tag">Para probar</span></div><div class="price">19.99 <small>USD/mes</small></div><div class="alt">11.99 USD con pago anual</div><div class="inc">Créditos de IA · 103 videos IA</div></div>
+      <div class="plan"><div class="name">AI Core</div><div class="price">39.99 <small>USD/mes</small></div><div class="alt">23.99 USD con pago anual</div><div class="inc">Más créditos · 250 videos IA</div></div>
+      <div class="plan"><div class="name">AI Pro</div><div class="price">99.99 <small>USD/mes</small></div><div class="alt">59.99 USD con pago anual</div><div class="inc">120,000 créditos · 500 videos IA</div></div>
+      <div class="plan"><div class="name">Custom Business</div><div class="price">A medida</div><div class="inc">Términos legales e indemnización</div></div>
+    </div>
+    <p class="note">Para usar la música en trabajos de clientes se necesita la licencia Pro.</p>
+  </article>
+
+  <!-- ArtCraft -->
+  <article class="panel" id="artcraft" role="tabpanel" aria-labelledby="tab-artcraft">
+    <div class="p-head">
+      <div class="p-title"><h3>ArtCraft</h3><span class="url">getartcraft.com</span><span class="pill bad">Aún no</span></div>
+      <p class="verdict"><b>En una frase:</b> 17 apps de escritorio gratuitas y de código abierto (motion graphics, animación 2D, edición), la mayoría todavía en fase de prueba.</p>
+    </div>
+    <div class="crit3">
+      <div class="crit"><h4>Conexión con Claude <span class="pill mid">Parcial</span></h4>
+        <ul><li>Cada app puede controlarse por MCP.</li><li>No tiene conector de Claude: hay que configurarlo a mano.</li></ul></div>
+      <div class="crit"><h4>Facilidad <span class="pill bad">Difícil</span></h4>
+        <ul><li>Casi todas las apps están en "alpha" o "en desarrollo".</li><li>Tiene wiki, tutoriales y código en GitHub.</li></ul></div>
+      <div class="crit"><h4>Aporte a la publicidad</h4>
+        <ul><li>Alternativa sin costo a una suite profesional.</li><li>Hoy no es confiable para entregas de campaña.</li></ul></div>
+    </div>
+    <div class="block-h">Precios <span class="pill plain cur">USD por mes</span> <span>20% de descuento temporal</span></div>
+    <div class="plans">
+      <div class="plan pick"><div class="name">Free</div><div class="price">0 <small>USD</small></div><div class="inc">Todas las apps; usas tu propio equipo</div></div>
+      <div class="plan"><div class="name">Basic</div><div class="price">8 <small>USD/mes</small></div><div class="alt">antes 10 · 96 USD al año</div><div class="inc">1,000 créditos ≈ 63 s de video</div></div>
+      <div class="plan"><div class="name">Pro</div><div class="price">28 <small>USD/mes</small></div><div class="alt">antes 35 · 336 USD al año</div><div class="inc">3,750 créditos ≈ 234 s de video</div></div>
+      <div class="plan"><div class="name">Max</div><div class="price">48 <small>USD/mes</small></div><div class="alt">antes 60 · 576 USD al año</div><div class="inc">6,600 créditos ≈ 413 s de video</div></div>
+    </div>
+  </article>
+</section>
+
+<section id="siguientes">
+  <span class="eyebrow">Recomendación</span>
+  <h2>Siguientes pasos</h2>
+  <ol class="steps">
+    <li><div><b>Prueba piloto con MotionVid y Motion</b><span>Hacer el mismo anuncio de 15 s desde Claude en las dos y comparar calidad, tiempo y créditos. Costo: 19 USD + 6 USD.</span></div></li>
+    <li><div><b>Abrir cuenta gratis en Hera</b><span>Confirmar precio real y si la API está incluida; probar un overlay con nuestro kit de marca.</span></div></li>
+    <li><div><b>Usar Runway solo cuando haga falta una toma realista</b><span>Desde Claude, con un tope de gasto en créditos de API.</span></div></li>
+    <li><div><b>Artlist como fuente de música con licencia</b><span>Sin depender de su conexión con Claude.</span></div></li>
+    <li><div><b>Revisar ArtCraft el próximo trimestre</b><span>Cuando sus apps de motion salgan de la fase de prueba.</span></div></li>
+  </ol>
+</section>
+
+<section id="pendientes">
+  <span class="eyebrow">Por confirmar</span>
+  <h2>Pendientes antes de cerrar la tarea</h2>
+  <ul class="plain">
+    <li><b>Hera:</b> precios oficiales y qué plan incluye la API.</li>
+    <li><b>Artlist:</b> si su conexión con Claude sigue activa. Su ayuda (18 oct. 2026) todavía la documenta, pero sus planes ya no la listan.</li>
+    <li><b>Motion:</b> precio de los paquetes Pro mayores a 1,000 créditos.</li>
+    <li><b>Costo real por anuncio:</b> se sabrá con la prueba piloto, porque cada herramienta cobra sus créditos distinto.</li>
+  </ul>
+</section>
+
+<section id="fuentes">
+  <details>
+    <summary>Fuentes consultadas (17)</summary>
+    <div>
+      <ul class="sources">
+        <li><a href="https://motionvid.ai/pricing" target="_blank" rel="noopener">MotionVid · Precios</a></li>
+        <li><a href="https://motionvid.ai/mcp" target="_blank" rel="noopener">MotionVid · MCP</a></li>
+        <li><a href="https://motion.so/" target="_blank" rel="noopener">Motion · Sitio</a></li>
+        <li><a href="https://docs.motion.so/guides/mcp.md" target="_blank" rel="noopener">Motion · Guía MCP</a></li>
+        <li><a href="https://docs.motion.so/guides/credits.md" target="_blank" rel="noopener">Motion · Créditos</a></li>
+        <li><a href="https://docs.hera.video/mcp-server" target="_blank" rel="noopener">Hera · Documentación MCP</a></li>
+        <li><a href="https://hera.video/api" target="_blank" rel="noopener">Hera · API</a></li>
+        <li><a href="https://autoae.online/blog/hera-ai-pricing-2026" target="_blank" rel="noopener">AutoAE · Precios de Hera (terceros)</a></li>
+        <li><a href="https://runway.com/pricing" target="_blank" rel="noopener">Runway · Precios</a></li>
+        <li><a href="https://docs.dev.runwayml.com/guides/pricing/" target="_blank" rel="noopener">Runway · Precios de API</a></li>
+        <li><a href="https://github.com/runwayml/runway-api-mcp-server" target="_blank" rel="noopener">Runway · Servidor MCP (GitHub)</a></li>
+        <li><a href="https://aiweekly.co/alerts/runway-opens-mcp-server-for-chatgpt-claude-cursor-replit" target="_blank" rel="noopener">AI Weekly · Runway abre su MCP</a></li>
+        <li><a href="https://help.artlist.io/hc/en-us/articles/38948588333469-Artlist-MCP-Connect-Claude-ChatGPT-and-VS-Code-to-Artlist" target="_blank" rel="noopener">Artlist · Ayuda MCP</a></li>
+        <li><a href="https://pricingsaas.com/companies/artlist" target="_blank" rel="noopener">PricingSaaS · Planes de Artlist</a></li>
+        <li><a href="https://www.activepieces.com/blog/artlist-pricing-2026-what-every-plan-costs" target="_blank" rel="noopener">Activepieces · Planes de Artlist 2026</a></li>
+        <li><a href="https://getartcraft.com/" target="_blank" rel="noopener">ArtCraft · Sitio</a></li>
+        <li><a href="https://getartcraft.com/pricing" target="_blank" rel="noopener">ArtCraft · Precios</a></li>
+      </ul>
+    </div>
+  </details>
+</section>
+
+<footer>Información consultada el 17 de noviembre de 2026. Los precios cambian con frecuencia; confirmar en el sitio oficial antes de contratar.</footer>
+
+</div>
+</main>
+
+<script>
+(function () {
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('[role="tab"]'));
+  function show(id, scroll) {
+    var found = tabs.some(function (t) { return t.getAttribute('aria-controls') === id; });
+    if (!found) return;
+    tabs.forEach(function (t) {
+      var on = t.getAttribute('aria-controls') === id;
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
+      document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+    });
+    if (scroll) document.getElementById('herramientas').scrollIntoView();
+  }
+  tabs.forEach(function (t, i) {
+    t.addEventListener('click', function () { show(t.getAttribute('aria-controls')); });
+    t.addEventListener('keydown', function (e) {
+      var d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+      if (!d) return;
+      var n = tabs[(i + d + tabs.length) % tabs.length];
+      n.focus(); show(n.getAttribute('aria-controls'));
+    });
+  });
+  document.querySelectorAll('[data-open]').forEach(function (b) {
+    b.addEventListener('click', function () { show(b.getAttribute('data-open'), true); });
+  });
+  var h = location.hash.slice(1);
+  show(tabs.some(function (t) { return t.getAttribute('aria-controls') === h; }) ? h : 'motionvid');
+})();
+</script>
+
+</html>
